@@ -1,0 +1,1 @@
+"""EcoVolter integration."""
