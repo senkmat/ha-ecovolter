@@ -1,6 +1,7 @@
 import aiohttp
 import asyncio
 
+
 class EcoVolterApi:
     """Simple API client for EcoVolter."""
 
@@ -8,16 +9,13 @@ class EcoVolterApi:
         self.host = host
         self.port = port
 
-    async def async_test_connection(self):
-        """Test if the wallbox is reachable."""
-        url = f"http://{self.host}:{self.port}/status"
+    async def async_test_connection(self) -> bool:
+        """Test if EcoVolter is reachable."""
+        url = f"http://{self.host}:{self.port}/"
+
         try:
             async with aiohttp.ClientSession() as session:
-                async with session.get(url, timeout=5) as resp:
-                    if resp.status == 200:
-                        return True
-        except asyncio.TimeoutError:
+                async with session.get(url, timeout=5) as response:
+                    return response.status == 200
+        except (asyncio.TimeoutError, aiohttp.ClientError):
             return False
-        except Exception:
-            return False
-        return False
